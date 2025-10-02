@@ -15,6 +15,11 @@ export default function App() {
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
 
+
+  // const url='http://localhost:5000'
+  const url='https://mern-tts.onrender.com'
+
+
   // Load available voices and files
   useEffect(() => {
     loadVoices();
@@ -23,7 +28,7 @@ export default function App() {
 
   const loadVoices = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/voices");
+      const response = await fetch(`${url}/api/voices`);
       const data = await response.json();
       if (data.success) {
         setAvailableVoices(data.voices);
@@ -35,7 +40,7 @@ export default function App() {
 
   const loadAudioFiles = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/files");
+      const response = await fetch(`${url}/api/files`);
       const data = await response.json();
       if (data.success) {
         setAudioFiles(data.files);
@@ -51,7 +56,7 @@ export default function App() {
     }
 
     try {
-      const response = await fetch(`http://localhost:5000/api/files/${filename}`, {
+      const response = await fetch(`${url}/api/files/${filename}`, {
         method: "DELETE"
       });
       
@@ -70,7 +75,7 @@ export default function App() {
   const testServer = async () => {
     try {
       setLoading(true);
-      const response = await fetch("http://localhost:5000/api/health");
+      const response = await fetch(`${url}/api/health`);
       const data = await response.json();
       
       alert(`✅ Server Status: ${data.status}\n📊 Files: ${data.outputs.fileCount}\n💾 Total Size: ${(data.outputs.totalSize / 1024 / 1024).toFixed(1)} MB`);
@@ -85,7 +90,7 @@ export default function App() {
   const testTTS = async () => {
     try {
       setLoading(true);
-      const response = await fetch("http://localhost:5000/api/test", {
+      const response = await fetch(`${url}/api/test`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
@@ -96,7 +101,7 @@ export default function App() {
       
       const data = await response.json();
       if (data.success) {
-        const audioUrl = `http://localhost:5000${data.downloadUrl}`;
+        const audioUrl = `${url}${data.downloadUrl}`;
         const audio = new Audio(audioUrl);
         await audio.play();
         alert(`✅ Test successful! Audio is playing.\n🎵 Voice: ${data.voiceUsed}\n🔧 Service: ${data.service}`);
@@ -123,7 +128,7 @@ export default function App() {
     setProgress(0);
 
     try {
-      const response = await fetch("http://localhost:5000/api/process", {
+      const response = await fetch(`${url}/api/process`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -430,7 +435,7 @@ export default function App() {
                       <audio 
                         ref={audioRef}
                         controls 
-                        src={`http://localhost:5000${result.downloadUrl}`}
+                        src={`${url}${result.downloadUrl}`}
                         onPlay={handleAudioPlay}
                         onPause={handleAudioPause}
                         onEnded={handleAudioPause}
@@ -441,7 +446,7 @@ export default function App() {
                   {/* Download Options */}
                   <div className="action-buttons">
                     <a
-                      href={`http://localhost:5000${result.downloadUrl}`}
+                      href={`${url}${result.downloadUrl}`}
                       download={result.fileName}
                       className="btn btn-success"
                     >
@@ -449,7 +454,7 @@ export default function App() {
                       Download MP3
                     </a>
                     <button
-                      onClick={() => window.open(`http://localhost:5000${result.downloadUrl}`, "_blank")}
+                      onClick={() => window.open(`${url}${result.downloadUrl}`, "_blank")}
                       className="btn btn-secondary"
                     >
                       <span className="btn-icon">🔗</span>
@@ -457,7 +462,7 @@ export default function App() {
                     </button>
                     <button
                       onClick={() => {
-                        navigator.clipboard.writeText(`http://localhost:5000${result.downloadUrl}`);
+                        navigator.clipboard.writeText(`${url}${result.downloadUrl}`);
                         alert("Audio link copied to clipboard!");
                       }}
                       className="btn btn-outline"
@@ -553,11 +558,11 @@ export default function App() {
                           <div className="file-actions">
                             <audio
                               controls
-                              src={`http://localhost:5000${file.downloadUrl}`}
+                              src={`${url}${file.downloadUrl}`}
                               className="file-audio"
                             />
                             <a
-                              href={`http://localhost:5000${file.downloadUrl}`}
+                              href={`${url}${file.downloadUrl}`}
                               download={file.name}
                               className="btn btn-success btn-sm"
                             >
