@@ -19,7 +19,7 @@ A powerful web application that converts text to natural-sounding speech in both
 
 ## 🚀 Live Demo
 
-[Live Demo Link](#) | [Video Demo](#)
+[Live Demo Link][#https://merntexttospeech.netlify.app]
 
 ## 🛠️ Tech Stack
 
